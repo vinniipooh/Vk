@@ -8,23 +8,35 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="editAddPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vk.controllers.MainController">
    <children>
-      <ImageView fx:id="imageAdd" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="nameLabel">
+      <VBox fx:id="vboxid" prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <Button fx:id="lookButton" mnemonicParsing="false" onAction="#loockingBtn" text="Следить">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteBtn" prefHeight="25.0" prefWidth="75.0" text="Удалить">
+               <VBox.margin>
+                  <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+      <Label fx:id="nameLabel" text="SDFSSFSDFGDFSGFDS">
          <HBox.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
          </HBox.margin>
       </Label>
-      <Label fx:id="idLabel">
+      <Label fx:id="idLabel" text="SADFG">
          <HBox.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
          </HBox.margin>
       </Label>
-      <Label fx:id="statusLabel">
+      <Label fx:id="statusLabel" text="FDSGSDF">
          <HBox.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="10.0" left="15.0" right="10.0" top="20.0" />
          </HBox.margin>
       </Label>
    </children>

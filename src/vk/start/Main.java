@@ -5,15 +5,29 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import vk.controllers.MainController;
 
 public class Main extends Application {
 
+
+
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("fxml/MainWindow.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("../fxml/mainWindow.fxml"));
+
+        Parent root = fxmlLoader.load();
+        primaryStage.setTitle("Vk Loocker");
+        primaryStage.setMinWidth(350);
+        primaryStage.setMinHeight(400);
+        primaryStage.setResizable(false);
+        primaryStage.setScene(new Scene(root, 350, 400));
         primaryStage.show();
+
+
+
+        MainController mainController = fxmlLoader.getController();
+        mainController.setMainStage(primaryStage);
     }
 
 
