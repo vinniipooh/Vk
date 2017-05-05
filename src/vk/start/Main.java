@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import vk.bd.BD;
 import vk.controllers.MainController;
 
 public class Main extends Application {
@@ -28,6 +29,7 @@ public class Main extends Application {
 
         MainController mainController = fxmlLoader.getController();
         mainController.setMainStage(primaryStage);
+
     }
 
 

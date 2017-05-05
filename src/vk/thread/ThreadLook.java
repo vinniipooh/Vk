@@ -1,21 +1,22 @@
 package vk.thread;
 
 import javafx.scene.control.Label;
-import vk.controllers.MainController;
 import vk.interfaces.impl.SearchForData;
+
+import javax.swing.*;
+import java.awt.*;
+
 
 public class ThreadLook implements Runnable {
 
     private SearchForData sfd = new SearchForData();
 
     private String id;
-    private Label label;
-    private int threadsIndex;
 
-    public ThreadLook(String id, Label label,int threadsIndex) {
+
+    public ThreadLook(String id) {
         this.id = id;
-        this.label = label;
-        this.threadsIndex = threadsIndex;
+
     }
 
     @Override
@@ -23,7 +24,7 @@ public class ThreadLook implements Runnable {
 
         while (true) {
             if (sfd.isOnline(id)) {
-                MainController.checkShowDialog.get(threadsIndex).setShowORnot(1);
+                JOptionPane.showMessageDialog(null, sfd.getFullName(id)+ " появился в сети!");
 
                 while (sfd.isOnline(id)) {
                     try {
@@ -33,7 +34,8 @@ public class ThreadLook implements Runnable {
                     }
                 }
             } else {
-                label.setText(sfd.getStatus(id));
+
+
                 while (!sfd.isOnline(id)) {
                     try {
                         Thread.sleep(5000);

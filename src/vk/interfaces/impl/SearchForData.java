@@ -26,7 +26,8 @@ public class SearchForData implements SeachDataInterface {
             }
 
         } catch (MalformedURLException e1) {
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
         return false;
     }
 
@@ -34,9 +35,12 @@ public class SearchForData implements SeachDataInterface {
     public boolean checkId(String id) {
         String info = searchForData(id);
 
-        String accept = info.substring(2, 3);
-        if (accept.equals("r")) return true;
-        else return false;
+        String error = info.substring(2, 3);
+        if (error.equals("e")) {
+            return false;
+        } else if (info.substring(13, 14).equals("]")) {
+            return false;
+        }else return true;
     }
 
     @Override
@@ -73,9 +77,7 @@ public class SearchForData implements SeachDataInterface {
         i += 8;
         int d = i + 1;
         String status = info.substring(i, d);
-        if (status.equals("1"))
-            return true;
-        else return false;
+        return status.equals("1");
     }
 
     @Override
@@ -87,6 +89,7 @@ public class SearchForData implements SeachDataInterface {
         i += 13;
         int d = info.indexOf(",", i);
         d--;
+
         firstName = info.substring(i, d);
 
         int x = info.indexOf("last_name");

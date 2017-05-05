@@ -21,4 +21,5 @@ public interface SeachDataInterface {
 
     //Image getImage(String id);
 
+    //AsynkTask
 }

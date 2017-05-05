@@ -13,11 +13,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import vk.collection.ForShowDialog;
+import vk.bd.BD;
 import vk.dialog.DialogWindows;
 import vk.interfaces.impl.SearchForData;
 import vk.thread.ThreadLook;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,15 +28,12 @@ public class MainController implements Initializable {
     @FXML
     private VBox addPanel;
 
-    public static ArrayList<ForShowDialog> checkShowDialog = new ArrayList<>();
-
     private Stage addDialogStage;
     private Parent fxmlEdit;
     private FXMLLoader fxmlLoader = new FXMLLoader();
     private enterIDController enterIDController = new enterIDController();
     private Stage mainStage;
     private SearchForData sfd = new SearchForData();
-    private static String idFromTextField = "";
     private ArrayList<Thread> threadsList = new ArrayList<>();
     private static int threadIndex = 0;
 
@@ -45,21 +41,22 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initLoader();
-
-    }
-
-    public static void setIdFromTextField(String id) {
-        idFromTextField = id;
+        BD.connectionDB();
     }
 
     public void addButtonAction(ActionEvent actionEvent) {
         if (sfd.checkInternetConnection()) {
             showAddDialog();
-            if (!(addHBox(idFromTextField) == null)) {
-                addPanel.getChildren().add(addHBox(idFromTextField));
+            if (enterIDController.isFlag()) {
+                if (addHBox(enterIDController.getId()) != null) {
+                    addPanel.getChildren().add(addHBox(enterIDController.getId()));
+                    enterIDController.setFlag(false);
+                    BD.addIDDB(enterIDController.getId());
+                    return;
+                }
                 return;
             }
-
+            return;
         } else {
             DialogWindows.showErrorDialog("Ошибка", "Проверьте подключение к интернету");
             return;
@@ -69,7 +66,7 @@ public class MainController implements Initializable {
     public HBox addHBox(String id) {
         if (sfd.checkId(id)) {
             try {
-                HBox box = (HBox) FXMLLoader.load(getClass().getResource("../fxml/addNode.fxml"));
+                HBox box = FXMLLoader.load(getClass().getResource("../fxml/addNode.fxml"));
                 for (Node node1 : box.getChildren()) {
                     String idComponent = node1.getId();
                     switch (idComponent) {
@@ -110,9 +107,11 @@ public class MainController implements Initializable {
         }
     }
 
+
     void showAddDialog() {
         if (addDialogStage == null) {
             addDialogStage = new Stage();
+
             addDialogStage.setTitle("Добавить пользователя");
             addDialogStage.setMinHeight(150);
             addDialogStage.setMinWidth(300);
@@ -129,19 +128,24 @@ public class MainController implements Initializable {
         this.mainStage = mainStage;
     }
 
-    //public void createBoxStart() {
-    //    try{
-    //        while (BD.resSet.next()){
-    //            addHBox(BD.resSet.getString("id"));
-    //        }
-    //    }catch (SQLException e){
-    //        e.printStackTrace();
-    //    }
-    //}
+    public void createBoxStart() {
+        for (String id :
+                BD.getIDDB()) {
+            addPanel.getChildren().add(addHBox(id));
+        }
+    }
 
     public void deleteBtn(ActionEvent actionEvent) {
         Button btn = (Button) actionEvent.getSource();
         HBox box = (HBox) (btn.getParent()).getParent();
+
+        for (Node node : box.getChildren()) {
+            if (node.getId().equals("idLabel")) {
+                Label label = (Label) node;
+                BD.deleteIDDB(label.getText());
+            }
+        }
+
 
         VBox vb = (VBox) box.getParent();
         vb.getChildren().remove(box);
@@ -152,7 +156,7 @@ public class MainController implements Initializable {
         String getName = btn.getText();
         btn.setId(String.valueOf(threadIndex));
 
-        Label label = null;
+        Label label;
         String id = "";
         HBox box = (HBox) (btn.getParent()).getParent();
 
@@ -165,22 +169,12 @@ public class MainController implements Initializable {
             }
         }
 
-        for (Node node1 : box.getChildren()) {
-            String name = node1.getId();
-            if (name.equals("statusLabel")) {
-                label = (Label) node1;
-                break;
-            }
-        }
-
 
         if (getName.equals("Следить")) {
             if (!threadsList.contains(threadIndex)) {
-                Runnable addThread = new ThreadLook(id, label, threadIndex);
+                Runnable addThread = new ThreadLook(id);
                 Thread thread = new Thread(addThread);
                 thread.start();
-                threadsList.add(threadIndex++, thread);
-                checkShowDialog.add(threadIndex, new ForShowDialog(0, id));
                 btn.setText("Не следить");
             } else {
                 threadsList.get(Integer.parseInt(btn.getId())).notify();
@@ -198,7 +192,7 @@ public class MainController implements Initializable {
         }
     }
 
-    void showInfoDialog() {
-
+    public void downloadPeople(ActionEvent actionEvent) {
+        createBoxStart();
     }
 }

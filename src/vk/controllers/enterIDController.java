@@ -19,8 +19,28 @@ public class enterIDController {
     @FXML
     private TextField giveID;
 
+    private boolean flag = false;
+    private String id = "";
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
     public void okButton(ActionEvent actionEvent) {
-            MainController.setIdFromTextField(giveID.getText());
+            id = giveID.getText();
+            flag = true;
             cancelButton(actionEvent);
     }
 
@@ -28,5 +48,6 @@ public class enterIDController {
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.hide();
+        giveID.setText("");
     }
 }
